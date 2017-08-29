@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1">
+
+    <title>Insurance</title>
+
+    <!-- Loading third party fonts -->
+    <link href="http://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700|" rel="stylesheet" type="text/css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Loading main css file -->
+    <link rel="stylesheet" href="style.css">
+
+    <!--[if lt IE 9]>
+    <script src="../web/js/ie-support/html5.js"></script>
+    <script src="../web/js/ie-support/respond.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+<div id="site-content">
+    <header id="header" class="site-header">
+        <div class="top-header">
+            <div class="container">
+                <a href="index.html" id="branding">
+                    <img src="images/logo.png" alt="Company Name" class="logo">
+                    <div class="logo-text">
+                        <h1 class="site-title">Emona osiguranje</h1>
+                        <small class="description">Naše klijente je lako prepoznati!</small>
+                    </div>
+                </a> <!-- #branding -->
+
+                <div class="right-section pull-right">
+                    <a href="#" class="phone"><i class="fa fa-phone"></i> + 387 61 733 277</a>
+
+                    <form action="#" class="search-form">
+                        <input type="text" placeholder="Search...">
+                        <button type="submit"><img src="images/icon-search.png" alt=""></button>
+                    </form>
+                </div>
+            </div> <!-- .container -->
+        </div> <!-- .top-header -->
+
+
+        <div class="bottom-header">
+            <div class="container">
+                <div class="main-navigation">
+                    <button type="button" class="menu-toggle"><i class="fa fa-bars"></i></button>
+                    <ul class="menu">
+                        <li class="menu-item"><a [routerLink]="['Pocetna']">Početna</a></li>
+                        <li class="menu-item"><a [routerLink]="['PlanOsiguranja']">Ponuda osiguranja</a></li>
+                        <li class="menu-item"><a [routerLink]="['ForumOsiguranja']">Forum</a></li>
+                        <li class="menu-item"><a [routerLink]="['ONama']">O nama</a></li>
+                        <li class="menu-item"><a [routerLink]="['Kontakt']">Kontakt</a></li>
+                        <li class="menu-item"><a [routerLink]="['Vijest']" [hidden]="novaVijest">Dodaj novu vijest</a>
+                        </li>
+                    </ul> <!-- .menu -->
+                </div> <!-- .main-navigation -->
+                <div *ngFor="#korisnik of korisnici" style="margin-right: -180px; margin-left: 20px">
+                    <ul class="nav navbar-right" style="float: left; height: 30px">
+                        <li class="dropdown">
+                            <a href="#" data-toggle="dropdown"
+                               class="fa fa-user" style="
+                           float: right;
+                              width: 150px;
+                              height: 30px;
+                              border: 1px solid rgba(255, 255, 255, 0.3);
+                              text-align: center;
+                              line-height: 0.5;
+                              outline-width: inherit;
+                              color: white;
+                              margin-left: 5px;
+                              display: inline-block;
+                              -webkit-transition: .3s ease;
+                              transition: .3s ease; "> {{korisnik.ime}}
+                            </a>
+                            <ul id="login-dp" class="dropdown-menu" [hidden]="submitted">
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            Prijavi se putem
+                                            <div class="social-buttons">
+                                                <a href="#" class="btn btn-fb"><i class="fa fa-facebook"></i>
+                                                    Facebook</a>
+                                                <a href="#" class="btn btn-tw"><i class="fa fa-twitter"></i> Twitter</a>
+                                            </div>
+                                            ili
+                                            <form class="form" role="form" method="post" action="login"
+                                                  accept-charset="UTF-8" id="login-nav">
+                                                <div class="form-group">
+                                                    <label class="sr-only" for="email">Email adresa</label>
+                                                    <input type="email" [(ngModel)]="korisnik.email"
+                                                           class="form-control" id="email" placeholder="Email adresa"
+                                                           required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="sr-only" for="sifra">Šifra</label>
+                                                    <input type="password" class="form-control"
+                                                           [(ngModel)]="korisnik.sifra" id="sifra" placeholder="Šifra"
+                                                           required>
+                                                    <div class="help-block text-right"><a
+                                                            href="">Zaboravili ste šifru?</a></div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-primary btn-block"
+                                                            (click)="PrijaviSe()">Prijavi se
+                                                    </button>
+                                                </div>
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox"> Zapamti me
+                                                    </label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="bottom text-center">
+                                            Novi ste? <a href="#"><b>Pridružite nam se</b></a>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <ul id="logout-dp" class="dropdown-menu" [hidden]="!submitted">
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            Odjavi se
+                                            <br>
+                                            <br>
+                                            <form class="form" role="form" style="padding-left: 5px; padding-right: 5px"
+                                                  action="login" accept-charset="UTF-8" id="logout-nav">
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-fb btn-block"
+                                                            (click)="OdjaviSe()">Odjavi se
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="social-links">
+                    <a href="#"><i class="fa fa-facebook"></i></a>
+                    <a href="#"><i class="fa fa-twitter"></i></a>
+                    <a href="#"><i class="fa fa-google-plus"></i></a>
+                    <a href="#"><i class="fa fa-pinterest"></i></a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </header> <!-- .site-header -->
+    <div style="margin-left: -10px">
+        <router-outlet></router-outlet>
+    </div>
+
+
+    <div id="footer" class="site-footer">
+        <div class="widget-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-4 col-sm-4">
+                        <div class="widget">
+                            <h3 class="widget-title">Kontakt</h3>
+                            <address> 22. Divizije, Gračanica, Bosna i Hercegovina
+                            </address>
+                            <a href="#">Telefon: +387 35 706 528</a>
+                            <br>
+                            <br>
+                            <label>Email: </label><a href="mailto:info@company.com">emonaosiguranje@hotmail.com</a>
+                        </div>
+                    </div>
+                    <div class="col-xs-4 col-sm-4">
+                        <div class="widget">
+                            <h3 class="widget-title">Emona osiguranje</h3>
+                            <ul class="no-bullet">
+                                <li><a [routerLink]="['Pocetna']">Početna</a></li>
+                                <li><a [routerLink]="['PlanOsiguranja']">Ponuda osiguranja</a></li>
+                                <li><a [routerLink]="['ForumOsiguranja']">Forum</a></li>
+                                <li><a [routerLink]="['ONama']">O nama</a></li>
+                                <li><a [routerLink]="['Kontakt']">Kontakt</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-xs-4 col-sm-4">
+                        <div class="widget">
+                            <h3 class="widget-title">Osiguranja</h3>
+                            <ul class="no-bullet">
+                                <li><a href="#">Životno osiguranje</a></li>
+                                <li><a href="#">Putničko zdravstveno osiguranje</a></li>
+                                <li><a href="#">Osiguranje pokretne imovice</a></li>
+                                <li><a href="#">Osiguranje transporta</a></li>
+                                <li><a href="#">Osiguranje imovine</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-footer">
+            <div class="container">
+                <nav class="footer-navigation">
+                    <a href="pocetna.html">Početna</a>
+                    <a href="planosiguranja.html">Ponuda osiguranja</a>
+                    <a href="resource.html">Forum</a>
+                    <a href="resource.html">O nama</a>
+                    <a href="kontakt.html">Kontakt</a>
+                </nav>
+
+                <div class="colophon">Copyright 2017 Emona osiguranje.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../web/js/jquery-1.11.1.min.js"></script>
+<script src="http://maps.google.com/maps/api/js?sensor=false&amp;language=en"></script>
+<script src="../web/js/plugins.js"></script>
+<script src="../web/js/app.js"></script>
+
+</body>
+
+</html>

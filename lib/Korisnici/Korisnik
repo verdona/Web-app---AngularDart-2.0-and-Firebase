@@ -1,0 +1,9 @@
+class Korisnik {
+  String ime;
+  String email;
+  String sifra;
+
+  Korisnik(this.ime, this.email, this.sifra);
+
+  String toString() => '$ime';
+}
