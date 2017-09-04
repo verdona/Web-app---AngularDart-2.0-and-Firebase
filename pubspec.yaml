@@ -15,7 +15,8 @@ dependencies:
 dev_dependencies:
   browser: ^0.10.0
   dart_to_js_script_rewriter: ^1.0.1
-
+  firebase: '^4.0.0'
+  dson: ^0.3.0
 
 transformers:
 - angular2:

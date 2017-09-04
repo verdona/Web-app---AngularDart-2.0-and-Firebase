@@ -14,32 +14,35 @@ import 'package:osiguranje11082017_v3/Pitanja/pitanje.dart';
 )
 class ForumOsiguranjeComponent implements OnInit {
 
-  ForumOsiguranjeComponent(this._pitanjeService);
+  ForumOsiguranjeComponent(this._Service);
 
-  final Service _pitanjeService;
+  final Service _Service;
 
   @Input()
   List<Pitanje> pitanjaList;
 
+  @Input() Korisnik korisnik;
   String visible = 'hidden';
   String display = 'none';
   bool odgovori;
 
   @override
   ngOnInit() async {
-    pitanjaList = (await _pitanjeService.getPitanja());
+    pitanjaList = (await _Service.getPitanja());
 
-    List<Korisnik> korisnici = await _pitanjeService.getKorisnici();
-
-    if (korisnici.first.ime == 'Prijavi se') {
-      odgovori = true;
-      querySelector('#postaviPitanje').style.visibility = 'hidden';
-      querySelector('#postaviPitanje').style.display = 'none';
-    }
-    else {
-      odgovori = false;
-      querySelector('#postaviPitanje').style.visibility = 'visible';
-      querySelector('#postaviPitanje').style.display = 'block';
+    korisnik = await _Service.getTrenutniKorisnik();
+    if(korisnik != null)
+    {
+      if (korisnik.ime == 'Prijavi se') {
+        odgovori = true;
+        querySelector('#postaviPitanje').style.visibility = 'hidden';
+        querySelector('#postaviPitanje').style.display = 'none';
+      }
+      else {
+        odgovori = false;
+        querySelector('#postaviPitanje').style.visibility = 'visible';
+        querySelector('#postaviPitanje').style.display = 'block';
+      }
     }
   }
 
@@ -62,12 +65,13 @@ class ForumOsiguranjeComponent implements OnInit {
   }
 
   KomentarisiClick(int pitanjeId) async {
-    Pitanje p = await _pitanjeService.GetById(pitanjeId);
+    Pitanje p = await _Service.GetById(pitanjeId);
+
     var komentar = querySelectorAll('#komentar');
     TextAreaElement element = komentar[pitanjeId - 1];
 
     if (element.value != "") {
-      List<Korisnik> korisnici = await _pitanjeService.getKorisnici();
+      Korisnik korisnik = await _Service.getTrenutniKorisnik();
 
       num idKomentara;
       if (p.komentari != null) {
@@ -83,15 +87,15 @@ class ForumOsiguranjeComponent implements OnInit {
       String formatted = formatter.format(now);
 
       p.komentari.add(new Komentar(
-          idKomentara, korisnici.first.ime, element.value, formatted));
+          idKomentara, korisnik.ime, element.value, formatted));
 
       OdgovoriClick(pitanjeId);
     }
   }
 
   PostaviPitanjeClick() async {
-    num idPitanje = await _pitanjeService.GetMaxPitanje();
-    List<Korisnik> korisnici = await _pitanjeService.getKorisnici();
+    num idPitanje = await _Service.GetMaxPitanje();
+    Korisnik korisnik = await _Service.getTrenutniKorisnik();
     TextAreaElement element = querySelector('#pitanje');
 
     if (element.value != "") {
@@ -100,10 +104,9 @@ class ForumOsiguranjeComponent implements OnInit {
       String formatted = formatter.format(now);
 
       pitanjaList.add(new Pitanje(
-          idPitanje + 1, korisnici.first.ime, element.value, formatted,
+          idPitanje + 1, korisnik.ime, element.value, formatted,
           null));
     }
   }
-
 
 }

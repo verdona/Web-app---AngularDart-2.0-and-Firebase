@@ -63,10 +63,10 @@
                         </li>
                     </ul> <!-- .menu -->
                 </div> <!-- .main-navigation -->
-                <div *ngFor="#korisnik of korisnici" style="margin-right: -180px; margin-left: 20px">
+                <div style="margin-right: -180px; margin-left: 20px">
                     <ul class="nav navbar-right" style="float: left; height: 30px">
                         <li class="dropdown">
-                            <a href="#" data-toggle="dropdown"
+                            <a href="#"  target="login-dp" data-toggle="dropdown" (click)="PrijaviSe1()"
                                class="fa fa-user" style="
                            float: right;
                               width: 150px;
@@ -79,10 +79,10 @@
                               margin-left: 5px;
                               display: inline-block;
                               -webkit-transition: .3s ease;
-                              transition: .3s ease; "> {{korisnik.ime}}
+                              transition: .3s ease; ">{{korisnik.ime}}
                             </a>
-                            <ul id="login-dp" class="dropdown-menu" [hidden]="submitted">
-                                <li>
+                            <ul id="login-dp" class="dropdown-menu" >
+                                <li [hidden]="korisnik.ime != 'Prijavi se'">
                                     <div class="row">
                                         <div class="col-md-12">
                                             Prijavi se putem
@@ -125,12 +125,9 @@
                                         </div>
                                     </div>
                                 </li>
-                            </ul>
-                            <ul id="logout-dp" class="dropdown-menu" [hidden]="!submitted">
-                                <li>
+                                <li [hidden]="korisnik.ime == 'Prijavi se'">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            Odjavi se
                                             <br>
                                             <br>
                                             <form class="form" role="form" style="padding-left: 5px; padding-right: 5px"

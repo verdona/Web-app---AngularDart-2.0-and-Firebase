@@ -1,11 +1,11 @@
 // Copyright (c) 2017, Dzenana. All rights reserved. Use of this source code
 
 // is governed by a BSD-style license that can be found in the LICENSE file.
-
-import 'dart:convert';
+library example.json_to_object;
+import 'dart:html';
 import 'package:angular2/angular2.dart';
 import 'package:angular2/router.dart';
-import 'package:osiguranje11082017_v3/Osiguranje/osiguranjeclass.dart';
+import 'package:osiguranje11082017_v3/Osiguranje/osiguranje.dart';
 import 'package:osiguranje11082017_v3/Servis/Service.dart';
 import 'package:osiguranje11082017_v3/dodajVijest_component.dart';
 import 'package:osiguranje11082017_v3/forumosiguranje_component.dart';
@@ -15,7 +15,6 @@ import 'package:osiguranje11082017_v3/onama_component.dart';
 import 'package:osiguranje11082017_v3/osiguranjedetalji_component.dart';
 import 'package:osiguranje11082017_v3/planosiguranja_component.dart';
 import 'package:osiguranje11082017_v3/pocetna_component.dart';
-import 'package:firebase/firebase.dart' as fb;
 
 // AngularDart info: https://webdev.dartlang.org/angular
 // Components info: https://webdev.dartlang.org/components
@@ -51,75 +50,56 @@ class AppComponent
   AppComponent(this._service);
 
   @Input()
-  List<Korisnik> korisnici;
+  List<Korisnik> korisniciBaza = [];
 
-  List<OsiguranjeClass> osiguranjeClass;
+  @Input()
+  List<Osiguranje> osiguranja = [];
+
   bool submitted = false;
   bool novaVijest = true;
 
   Service _service;
-  Korisnik korisnik;
+  Korisnik korisnik = new Korisnik("Prijavi se","","","user");
+
 
   num count = 0;
   var osiguranje;
 
   @override
   ngOnInit() async {
-    fb.initializeApp(
-        apiKey: "AIzaSyBoO3CklXNReACBWzacUDRIG7pWt8Ii48k",
-        authDomain: "osiguranje-3bb86.firebaseapp.com",
-        databaseURL: "https://osiguranje-3bb86.firebaseio.com",
-        storageBucket: "osiguranje-3bb86.appspot.com"
-    );
-    fb.Database database = fb.database();
-    fb.DatabaseReference ref = database.ref('osiguranja');
-
-    ref.onValue.listen((e) {
-      fb.DataSnapshot datasnapshot = e.snapshot;
-      var osiguranja = datasnapshot.val();
-      List osiguranjaMapa = JSON.decode(osiguranja);
-
-      for (var i = 0; i < osiguranjaMapa.length; i++) {
-        OsiguranjeClass o = new OsiguranjeClass();
-        o.naziv = osiguranjaMapa[i]['naziv'];
-        osiguranjeClass.add(o);
-      }
-    });
-
-
-    korisnici = (await _service.getKorisnici());
-    korisnik = new Korisnik('Prijavi se', '', '', 'user');
-    korisnici.add(korisnik);
+    korisniciBaza = (await _service.getKorisniciBaza());
+    osiguranja = (await _service.getOsiguranja());
+    _service.SetKorisnik(korisnik);
   }
 
-  PrijaviSe() {
-    if (korisnik.email == 'dzenana@live.com') {
-      if (submitted == false) {
-        korisnici.clear();
-      }
-      korisnik = new Korisnik('Dzenana', 'dzenana@live.com', '', 'admin');
-      korisnici.add(korisnik);
-      submitted = !submitted;
-      novaVijest = false;
-    }
 
-    if (korisnik.email == 'azra@live.com') {
-      if (submitted == false) {
-        korisnici.clear();
-      }
-      korisnik = new Korisnik('Azra', 'azra@live.com', '', 'user');
-      korisnici.add(korisnik);
-      submitted = !submitted;
-      novaVijest = true;
+  PrijaviSe1() {
+    if(querySelector('#login-dp').style.visibility == 'hidden')
+    {
+      querySelector('#login-dp').style.visibility = 'visible';
     }
+  }
+  PrijaviSe() {
+    if(korisniciBaza != null)
+    {
+      if (korisniciBaza.firstWhere((k) => k.email == korisnik.email) != null) {
+        korisnik = korisniciBaza.firstWhere(((k) => k.email == korisnik.email));
+        if(korisnik.tipKorisnika == 'admin')
+        {
+          novaVijest = false;
+        }
+        else
+        {
+          novaVijest = true;
+        }
+      }
+    }
+    querySelector('#login-dp').style.visibility = 'hidden';
   }
 
   OdjaviSe() {
-    korisnici.clear();
-    korisnik = new Korisnik('Prijavi se', '', '', 'user');
-    korisnici.add(korisnik);
-    submitted = false;
+    korisnik = new Korisnik("Prijavi se",null,null,null);
     novaVijest = true;
+    querySelector('#login-dp').style.visibility = 'hidden';
   }
 }
-
