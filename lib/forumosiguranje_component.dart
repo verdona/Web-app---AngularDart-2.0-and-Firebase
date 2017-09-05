@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:html';
 import 'package:angular2/angular2.dart';
 import 'package:intl/intl.dart';
@@ -46,48 +47,49 @@ class ForumOsiguranjeComponent implements OnInit {
     }
   }
 
-  OdgovoriClick(num idPitanje) async {
-    var text = querySelectorAll('#textareaOdgovor');
+  OdgovoriClick(String idPitanje){
+    var text = querySelectorAll('#'+idPitanje);
     if (visible == 'hidden') {
-      text[idPitanje - 1].style.visibility = 'visible';
+      text.style.visibility = 'visible';
       visible = 'visible';
 
-      text[idPitanje - 1].style.display = 'block';
+      text.style.display = 'block';
       display = 'block';
     }
     else {
-      text[idPitanje - 1].style.visibility = 'hidden';
+      text.style.visibility = 'hidden';
       visible = 'hidden';
 
-      text[idPitanje - 1].style.display = 'none';
+      text.style.display = 'none';
       display = 'none';
     }
   }
 
-  KomentarisiClick(int pitanjeId) async {
-    Pitanje p = await _Service.GetById(pitanjeId);
-
-    var komentar = querySelectorAll('#komentar');
-    TextAreaElement element = komentar[pitanjeId - 1];
+  KomentarisiClick(String pitanjeId) async {
+    Pitanje p = await _Service.GetById(pitanjeId.toString());
+    var div = new DivElement();
+    div  = querySelector('#'+pitanjeId);
+    var komentar = div.querySelector("#komentar");
+    TextAreaElement element = komentar;
 
     if (element.value != "") {
       Korisnik korisnik = await _Service.getTrenutniKorisnik();
 
       num idKomentara;
       if (p.komentari != null) {
-        idKomentara = p.komentari.length + 1;
+        idKomentara =  (await p.komentari).length + 1;
       }
       else {
         idKomentara = 1;
-        p.komentari = new List<Komentar>();
+         p.komentari = new List<Komentar>();
       }
 
       var now = new DateTime.now();
       var formatter = new DateFormat('yyyy-MM-dd');
       String formatted = formatter.format(now);
 
-      p.komentari.add(new Komentar(
-          idKomentara, korisnik.ime, element.value, formatted));
+      _Service.DodajKomentar(pitanjeId, new Komentar(
+          idKomentara.toString(), korisnik.ime, element.value, formatted));
 
       OdgovoriClick(pitanjeId);
     }
@@ -102,10 +104,10 @@ class ForumOsiguranjeComponent implements OnInit {
       var now = new DateTime.now();
       var formatter = new DateFormat('yyyy-MM-dd');
       String formatted = formatter.format(now);
-
-      pitanjaList.add(new Pitanje(
-          idPitanje + 1, korisnik.ime, element.value, formatted,
-          null));
+      List<Komentar> komentari = [];
+      _Service.DodajPitanje(new Pitanje(
+          (idPitanje + 1).toString(), korisnik.ime, element.value, formatted,
+          komentari));
     }
   }
 

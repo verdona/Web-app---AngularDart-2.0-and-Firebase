@@ -3,7 +3,6 @@ import 'package:angular2/angular2.dart';
 import 'package:intl/intl.dart';
 import 'package:osiguranje11082017_v3/Servis/Service.dart';
 import 'package:osiguranje11082017_v3/Vijesti/Vijest.dart';
-import 'package:firebase/firebase.dart' as fb;
 
 @Component(
     selector: 'dodajVijest',
@@ -30,7 +29,6 @@ class DodajVijestComponent implements OnInit {
     String formatted = formatter.format(now);
     TextAreaElement elementVijest = querySelector('#vijest');
     InputElement elementNaslov = querySelector('#naslov');
-    InputElement elementSlika = querySelector('#slika');
     InputElement lblElement = querySelector('#id');
     if(lblElement.value == ""){
       Vijest v =  new Vijest("1", elementNaslov.value, elementVijest.value, formatted, 'images/logo@2x.png');
@@ -61,7 +59,6 @@ class DodajVijestComponent implements OnInit {
   IzmijeniVijest(Vijest vijest){
     TextAreaElement elementVijest = querySelector('#vijest');
     InputElement elementNaslov = querySelector('#naslov');
-    InputElement elementSlika = querySelector('#slika');
     InputElement lblElement = querySelector('#id');
     elementNaslov.value = vijest.naslov;
     elementVijest.value = vijest.vijest;

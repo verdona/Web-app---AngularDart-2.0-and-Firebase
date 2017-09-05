@@ -95,11 +95,13 @@ class AppComponent
       }
     }
     querySelector('#login-dp').style.visibility = 'hidden';
+    _service.SetKorisnik(korisnik);
   }
 
   OdjaviSe() {
     korisnik = new Korisnik("Prijavi se",null,null,null);
     novaVijest = true;
     querySelector('#login-dp').style.visibility = 'hidden';
+    _service.SetKorisnik(korisnik);
   }
 }
